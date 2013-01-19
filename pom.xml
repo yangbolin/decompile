@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- parent project -->
+    <parent>
+        <groupId>com.alibaba</groupId>
+        <artifactId>a2m.china</artifactId>
+        <version>2</version>
+    </parent>
+    
+    <!-- project info -->
+    <groupId>com.alibaba.decompile.shared</groupId>
+    <artifactId>decompile</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>decompile</name>
+
+    <!-- 二方库的子模块 -->
+    <modules>
+		<module>decompile_shared</module>
+    </modules>
+
+    <properties>
+        <!--maven properties-->
+        <maven.test.skip>false</maven.test.skip>
+        <!-- compiler settings properties -->
+        <java_source_version>1.6</java_source_version>
+        <java_target_version>1.6</java_target_version>
+        <project.build.sourceEncoding>GBK</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>GBK</project.reporting.outputEncoding>
+		<maven_resources_version>2.3</maven_resources_version>
+    </properties>
+    <dependencyManagement>
+		<dependencies>
+			<dependency>
+				  <groupId>xml-apis</groupId>
+				  <artifactId>xml-apis</artifactId>
+				  <version>2.0.2</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+    <!-- Build Settings -->
+    <build>            
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.3</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <findbugsXmlOutput>true</findbugsXmlOutput>
+                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+            </plugin>
+            <!-- Add source folders -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build_helper_plugin_version}</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/test/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <testNGArtifactName>com.alibaba.external:test.testng.jdk15</testNGArtifactName>
+                    <argLine>-javaagent:"${settings.localRepository}/com/alibaba/external/test.jmockit/0.997/test.jmockit-0.997.jar"</argLine>
+                    <useSystemClassLoader>true</useSystemClassLoader>
+                    <suiteXmlFiles>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+				    <aggregate>true</aggregate>
+					<destDir>${project.basedir}/docs/sources</destDir>
+					<linkJavadoc>true</linkJavadoc>
+					<javadocDir>${project.basedir}/docs/javadoc</javadocDir>
+				</configuration>
+			</plugin>
+	    </plugins>
+    
+        <sourceDirectory>src/main/java</sourceDirectory>  
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <excludes>
+                    <exclude>**/.svn/</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <excludes>
+                    <exclude>**/.svn/</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+    </build>
+</project>
+
