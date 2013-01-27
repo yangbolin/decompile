@@ -8,10 +8,10 @@
 package com.alibaba.decompile.common.operand.impl;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.SkipByteCode;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.factory.DecompileFactory;
 
@@ -38,12 +38,9 @@ public class SkipByteCodeOperandParser implements ByteCodeOperandParser {
         byte[] offsetBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
         
         // 2.把字节数组转换成整型数字
-        int offset = Integer.valueOf(ByteUtils.bytesToHex(offsetBytes), DecompileConstants.HEX_RADIX);
+        int offset = ByteUtils.bytesToInt(offsetBytes);
         
         byteCode.setOffset(offset);
-        
-        // 3.设置当前字节码所占的字节总数
-        byteCode.setTotalBytes(DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE + byteCode.getOperandBytes());
         
         return (ByteCode)byteCode;
     }

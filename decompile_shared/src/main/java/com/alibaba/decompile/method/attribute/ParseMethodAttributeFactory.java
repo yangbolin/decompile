@@ -9,6 +9,7 @@ package com.alibaba.decompile.method.attribute;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import com.alibaba.decompile.common.ArrtibuteParser;
 import com.alibaba.decompile.common.DeprecatedInfoParser;
 import com.alibaba.decompile.common.SyntheticInfoParser;
@@ -16,6 +17,7 @@ import com.alibaba.decompile.method.attribute.impl.LineNumberTableParser;
 import com.alibaba.decompile.method.attribute.impl.LocalVariableTableParser;
 import com.alibaba.decompile.method.attribute.impl.MethodCodeParser;
 import com.alibaba.decompile.method.attribute.impl.MethodExceptionsParser;
+import com.alibaba.decompile.method.attribute.impl.StackMapTableParser;
 
 /**
  * <pre>
@@ -32,6 +34,7 @@ public class ParseMethodAttributeFactory {
     private static final String                 SYNTHETIC          = "Synthetic";
     private static final String                 LINENUMBERTABLE    = "LineNumberTable";
     private static final String                 LOCALVARIABLETABLE = "LocalVariableTable";
+    private static final String                 STACKMAPTABLE      = "StackMapTable";
 
     /** 一个map类型的数据结构，存储方法的属性解析器 **/
     private static Map<String, ArrtibuteParser> attributeSpecMap   = new HashMap<String, ArrtibuteParser>();
@@ -43,6 +46,7 @@ public class ParseMethodAttributeFactory {
         attributeSpecMap.put(SYNTHETIC, new SyntheticInfoParser());
         attributeSpecMap.put(LINENUMBERTABLE, new LineNumberTableParser());
         attributeSpecMap.put(LOCALVARIABLETABLE, new LocalVariableTableParser());
+        attributeSpecMap.put(STACKMAPTABLE, new StackMapTableParser());
     }
 
     public static ArrtibuteParser getSpecParser(String name) {

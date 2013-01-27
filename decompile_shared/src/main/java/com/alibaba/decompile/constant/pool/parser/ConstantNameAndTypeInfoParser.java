@@ -7,8 +7,8 @@
  */
 package com.alibaba.decompile.constant.pool.parser;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.ConstantInfo;
 import com.alibaba.decompile.constant.pool.ConstantInfoParser;
 import com.alibaba.decompile.constant.pool.ConstantType;
@@ -37,12 +37,12 @@ public class ConstantNameAndTypeInfoParser implements ConstantInfoParser {
         
         // 1.读取常量池中名称索引所占的字节数组
         byte[] nameIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(constantInfo.getNameIndexByteNum());
-        int nameIndex = Integer.valueOf(ByteUtils.bytesToHex(nameIndexBytes), DecompileConstants.HEX_RADIX);
+        int nameIndex = ByteUtils.bytesToInt(nameIndexBytes);
         constantInfo.setNameIndexValue(nameIndex);
         
         // 2.读取常量池中描述所占的字节数组
         byte[] descriptorBytes = byteCodeContext.getSpecifiedByteCodeArray(constantInfo.getDescriptorByteNum());
-        int descriptor = Integer.valueOf(ByteUtils.bytesToHex(descriptorBytes), DecompileConstants.HEX_RADIX);
+        int descriptor = ByteUtils.bytesToInt(descriptorBytes);
         constantInfo.setDescriptorValue(descriptor);
         
         return (ConstantInfo)constantInfo;

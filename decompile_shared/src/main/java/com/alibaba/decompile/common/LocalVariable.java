@@ -28,6 +28,8 @@ public class LocalVariable {
     private String name;
     /** 局部变量的描述符 **/
     private String descriptor;
+    /** 局部变量所在的slot **/
+    private int    index;
 
     public int getStartPC() {
         return startPC;
@@ -75,5 +77,26 @@ public class LocalVariable {
 
     public void setDescriptor(String descriptor) {
         this.descriptor = descriptor;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (DescriptorType.DOUBLE.getValue().equals(descriptor)) {
+            sb.append(String.format("startPC: %d length: %d slot1: %d slot2: %d name : %s descriptor: %d\n",
+                                    this.startPC, this.length, this.index, this.index + 1, this.name, this.descriptor));
+        } else {
+            sb.append(String.format("startPC: %d length: %d slot: %d name : %s descriptor: %d\n", this.startPC,
+                                    this.length, this.index, this.name, this.descriptor));
+        }
+        return sb.toString();
     }
 }

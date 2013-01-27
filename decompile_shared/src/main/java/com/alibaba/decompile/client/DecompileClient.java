@@ -16,6 +16,7 @@ import com.alibaba.decompile.factory.DecompileFactory;
 import com.alibaba.decompile.file.ReadByteCodeFile;
 import com.alibaba.decompile.file.ReadClassFile;
 import com.alibaba.decompile.handler.impl.AccessFlagsHandler;
+import com.alibaba.decompile.handler.impl.AttachAttributeHandler;
 import com.alibaba.decompile.handler.impl.ClassHandler;
 import com.alibaba.decompile.handler.impl.ConstantPoolHandler;
 import com.alibaba.decompile.handler.impl.FieldsHandler;
@@ -36,8 +37,14 @@ import com.alibaba.decompile.handler.impl.VersionHandler;
 public class DecompileClient {
     
     public static void main(String[] args) throws Exception {
+        
+        if (args.length == 0) {
+            System.out.println("Please give the absoulte path of the class file");
+            return;
+        }
+        
         // 0.class文件转换成byte数组
-        ReadClassFile rcf = new ReadClassFile("/home/yangbolin/ACM/JAVA/1003/MaxSum.class");
+        ReadClassFile rcf = new ReadClassFile(args[0]);
         
         // 1.构建字节码上下文
         ByteCodeContext bcc = new ByteCodeContext();
@@ -79,6 +86,10 @@ public class DecompileClient {
         // 10.解析完字段之后，解析方法
         MethodsHandler methodsHandler = new MethodsHandler();
         fieldsHandler.setNextHandler(methodsHandler);
+        
+        // 11.解析完方法之后，解析附加属性
+        AttachAttributeHandler attachAttributeHandler = new AttachAttributeHandler();
+        methodsHandler.setNextHandler(attachAttributeHandler);
         
         DecompileFactory decompileFactory = new DecompileFactory();
         decompileFactory.setJvmByteCodeContext(jvmByteCodeContext);         //把字节码上下文设置到反编译工厂中

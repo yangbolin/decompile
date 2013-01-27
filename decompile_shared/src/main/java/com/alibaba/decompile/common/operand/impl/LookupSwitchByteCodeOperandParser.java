@@ -8,11 +8,11 @@
 package com.alibaba.decompile.common.operand.impl;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.AbstractSwitchByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.LookupSwitchByteCode;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.factory.DecompileFactory;
 
@@ -36,8 +36,6 @@ public class LookupSwitchByteCodeOperandParser extends AbstractSwitchByteCodeOpe
         LookupSwitchByteCode byteCode = new LookupSwitchByteCode();
         byteCode.setOperandBytes(DecompileConstants.OPERAND_FOUR_BYTE);
         
-        int totalBytes = DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE;
-        
         // 1.读取填充的字节
         int paddingBytesNum = super.parsePaddingBytes(byteCodeContext);
         if (-1 == paddingBytesNum) {
@@ -45,40 +43,27 @@ public class LookupSwitchByteCodeOperandParser extends AbstractSwitchByteCodeOpe
             return null;
         }
         
-        totalBytes += paddingBytesNum;
-        
         // 2.解析default分支的跳转偏移地址
         byteCode.setOperandBytes(DecompileConstants.OPERAND_FOUR_BYTE);
         byteCode.setDefaultOffset(super.parseDefaultOffset(byteCodeContext));
         
-        totalBytes += DecompileConstants.OPERAND_FOUR_BYTE;
-        
         // 3.解析HashMap的记录数目
         byte[] branchesBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int branches = Integer.valueOf(ByteUtils.bytesToHex(branchesBytes), DecompileConstants.HEX_RADIX);
+        int branches = ByteUtils.bytesToInt(branchesBytes);
         byteCode.setBraches(branches);
-        
-        totalBytes += byteCode.getOperandBytes();
         
         // 4.解析每一条HashMap的记录数目
         for (int i = 0; i < branches; ++i) {
             // 4.1 解析case分支的value
             byte[] caseValueBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.OPERAND_FOUR_BYTE);
-            int caseValue = Integer.valueOf(ByteUtils.bytesToHex(caseValueBytes), DecompileConstants.HEX_RADIX);
-            
-            totalBytes += DecompileConstants.OPERAND_FOUR_BYTE;
+            int caseValue = ByteUtils.bytesToInt(caseValueBytes);
             
             // 4.2 解析分支对应的跳转偏移量
             byte[] offsetBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.OPERAND_FOUR_BYTE);
-            int offset = Integer.valueOf(ByteUtils.bytesToHex(offsetBytes), DecompileConstants.HEX_RADIX);
-            
-            totalBytes += DecompileConstants.OPERAND_FOUR_BYTE;
+            int offset = ByteUtils.bytesToInt(offsetBytes);
             
             byteCode.addOffsetMap(caseValue, offset);
         }
-        
-        // 5.设置当前字节码所占的字节总数
-        byteCode.setTotalBytes(totalBytes);
         
         return (ByteCode)byteCode;
     }

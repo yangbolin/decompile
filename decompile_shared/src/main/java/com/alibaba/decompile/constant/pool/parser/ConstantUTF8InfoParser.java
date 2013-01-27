@@ -7,8 +7,8 @@
  */
 package com.alibaba.decompile.constant.pool.parser;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.ConstantInfo;
 import com.alibaba.decompile.constant.pool.ConstantInfoParser;
 import com.alibaba.decompile.constant.pool.ConstantType;
@@ -34,7 +34,7 @@ public class ConstantUTF8InfoParser implements ConstantInfoParser {
         
         // 1.读取字符串长度所占的字节数组
         byte[] lengthBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.CONSTANT_UTF8STRING_LENGTH_BYTES);
-        int length = Integer.valueOf(ByteUtils.bytesToHex(lengthBytes), DecompileConstants.HEX_RADIX);
+        int length = ByteUtils.bytesToInt(lengthBytes);
         
         // 2.读取UTF8类型的字符串所占的字节数组
         byte[] utf8StringBytes = byteCodeContext.getSpecifiedByteCodeArray(length);

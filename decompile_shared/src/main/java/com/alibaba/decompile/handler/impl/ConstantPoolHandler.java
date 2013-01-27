@@ -7,8 +7,8 @@
  */
 package com.alibaba.decompile.handler.impl;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.ConstantInfo;
 import com.alibaba.decompile.constant.pool.ConstantInfoBackFillFactory;
 import com.alibaba.decompile.constant.pool.ConstantInfoParser;
@@ -58,8 +58,7 @@ public class ConstantPoolHandler extends DecompileHandler {
 
         // 1.常量池上下文的初始化
         this.constantPoolContext = new ConstantPoolContext();
-        this.constantPoolContext.setConstantNum(Integer.valueOf(ByteUtils.bytesToHex(constantNumBytes),
-                                                                DecompileConstants.HEX_RADIX));
+        this.constantPoolContext.setConstantNum(ByteUtils.bytesToInt(constantNumBytes));
 
         System.out.println(String.format("The num of constant in constant-pool is %d, and the index is from 1 to %d",
                                          this.constantPoolContext.getConstantNum(),
@@ -70,9 +69,8 @@ public class ConstantPoolHandler extends DecompileHandler {
         boolean finished = true;
         for (int i = 1; i < num; ++i) {
 
-            byte tag = classBytes[byteCodeContext.getCurrentIndex()];
-            int tagIndex = Integer.valueOf(ByteUtils.byteToHex(tag), DecompileConstants.HEX_RADIX);
-            byteCodeContext.forwardCurrentIndex();
+            byte[] tageIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.CONSTANT_TAG_BYTE);
+            int tagIndex = ByteUtils.bytesToInt(tageIndexBytes);
 
             ConstantInfoParser constantInfoParser = this.parserFactory.getParser(tagIndex);
             if (null == constantInfoParser) {

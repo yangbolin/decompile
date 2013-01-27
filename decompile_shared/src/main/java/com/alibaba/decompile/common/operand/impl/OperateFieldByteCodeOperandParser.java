@@ -8,10 +8,10 @@
 package com.alibaba.decompile.common.operand.impl;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.OperateFieldByteCode;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.impl.ConstantFieldRefInfo;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
@@ -34,7 +34,7 @@ public class OperateFieldByteCodeOperandParser implements ByteCodeOperandParser 
         
         // 1.读取字段在常量池中索引所占的字节数组
         byte[] indexBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int index = Integer.valueOf(ByteUtils.bytesToHex(indexBytes), DecompileConstants.HEX_RADIX);
+        int index = ByteUtils.bytesToInt(indexBytes);
         byteCode.setFieldIndex(index);
         
         // 2.根据常量池中的索引获取一个ConstantFieldRefInfo类型的常量
@@ -44,9 +44,6 @@ public class OperateFieldByteCodeOperandParser implements ByteCodeOperandParser 
         
         // 3.设置字段的描述信息
         byteCode.setDescriptionString(constantFieldRefInfo.getStringDescription());
-        
-        // 4.设置字节码所占的字节总数
-        byteCode.setTotalBytes(DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE + byteCode.getOperandBytes());
         
         return (ByteCode)byteCode;
     }

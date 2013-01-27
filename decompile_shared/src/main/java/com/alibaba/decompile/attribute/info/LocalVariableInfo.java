@@ -49,4 +49,15 @@ public class LocalVariableInfo extends AttributeInfo {
     public void setLocalVariableList(List<LocalVariable> localVariableList) {
         this.localVariableList = localVariableList;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("LocalVariable:\n");
+        for (LocalVariable localVariable : this.localVariableList) {
+            sb.append(localVariable.toString());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 }

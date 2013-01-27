@@ -7,8 +7,8 @@
  */
 package com.alibaba.decompile.handler.impl;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.MagicContext;
 import com.alibaba.decompile.factory.DecompileFactory;
@@ -32,23 +32,12 @@ public class MagicHandler extends DecompileHandler {
         
         System.out.println("***PARSE MAGIC NUM***");
         
-        // 0.准备字节数组
-        byte[] magicBytes = new byte[DecompileConstants.MAGIC_NUM_BYTES];
-        byte[] classByte = byteCodeContext.getClassByte();
+        byte[] magicBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.MAGIC_NUM_BYTES);
         
-        int srcPos = byteCodeContext.getCurrentIndex();
+        Integer magic = ByteUtils.bytesToInt(magicBytes);
         
-        // 1.从字节码上下文中拷贝出魔数所占的一段
-        System.arraycopy(classByte, srcPos, magicBytes, 0, DecompileConstants.MAGIC_NUM_BYTES);
+        String magicNum = Integer.toHexString(magic).toUpperCase();
         
-        // 2.字节码上下文中当前指针向前移动
-        byteCodeContext.forwardCurrentIndexSteps(DecompileConstants.MAGIC_NUM_BYTES);
-        
-        // 3.解析魔数
-        String magicNum = ByteUtils.bytesToHex(magicBytes);
-        magicNum = magicNum.toUpperCase();
-        
-        // 4.校验魔数
         if (magicNum.equals(DecompileConstants.MAGIC_NUM)) {
             
             magicContext.setMagicNum(magicNum);

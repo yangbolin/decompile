@@ -8,11 +8,11 @@
 package com.alibaba.decompile.common.operand.impl;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.AbstractSwitchByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.TableSwitchByteCode;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.factory.DecompileFactory;
 
@@ -37,8 +37,6 @@ public class TableSwitchByteCodeOperandParser extends AbstractSwitchByteCodeOper
         // 0.创建返回值对象
         TableSwitchByteCode byteCode = new TableSwitchByteCode();
         
-        int totalBytes = DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE;
-
         // 1.读取填充字节
         int paddingBytesNum = super.parsePaddingBytes(byteCodeContext);
         if (-1 == paddingBytesNum) {
@@ -46,36 +44,28 @@ public class TableSwitchByteCodeOperandParser extends AbstractSwitchByteCodeOper
             return null;
         }
 
-        totalBytes += paddingBytesNum;
-        
         // 2.读取default分支的偏移量数组
         byteCode.setOperandBytes(DecompileConstants.OPERAND_FOUR_BYTE);
         byteCode.setDefaultOffset(super.parseDefaultOffset(byteCodeContext));
 
         // 3.读取case分支最小值所占的字节数组
         byte[] lowBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int low = Integer.valueOf(ByteUtils.bytesToHex(lowBytes), DecompileConstants.HEX_RADIX);
+        int low = ByteUtils.bytesToInt(lowBytes);
         byteCode.setLow(low);
-        totalBytes += byteCode.getOperandBytes();
 
         // 4.读取case分支最大值所占的字节数组
         byte[] highBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int high = Integer.valueOf(ByteUtils.bytesToHex(highBytes), DecompileConstants.HEX_RADIX);
+        int high = ByteUtils.bytesToInt(highBytes);
         byteCode.setHigh(high);
-        totalBytes += byteCode.getOperandBytes();
 
         // 5.读取各个case分支对应的跳转偏移量
         int totalCases = high - low + 1;
         for (int i = 0; i < totalCases; ++i) {
             byte[] offsetBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-            int offset = Integer.valueOf(ByteUtils.bytesToHex(offsetBytes), DecompileConstants.HEX_RADIX);
+            int offset = ByteUtils.bytesToInt(offsetBytes);
             byteCode.addOffset(offset);
-            totalBytes += byteCode.getOperandBytes();
         }
 
-        // 6.设置当前字节码所占的字节总数
-        byteCode.setTotalBytes(totalBytes);
-        
         return (ByteCode) byteCode;
     }
 }

@@ -7,8 +7,8 @@
  */
 package com.alibaba.decompile.constant.pool.parser;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.ConstantInfo;
 import com.alibaba.decompile.constant.pool.ConstantInfoParser;
 import com.alibaba.decompile.constant.pool.ConstantType;

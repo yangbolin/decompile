@@ -163,4 +163,30 @@ public class CodeInfo extends AttributeInfo {
     public void setExceptionsTableLength(int exceptionsTableLength) {
         this.exceptionsTableLength = exceptionsTableLength;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("maxLocals:%d maxStacks:%d\n", this.maxLocals, this.maxStack));
+        
+        for(ByteCode byteCode : byteCodeList) {
+            sb.append(byteCode.toString());
+            sb.append("\n");
+        }
+        
+        if (this.exceptionsTableLength != 0) {
+            sb.append("Exceptions:\n");
+            sb.append("from\tto\ttarget\ttype\n");
+            for (ExceptionsTable exceptionTable : this.exceptionsTableList) {
+                sb.append(exceptionTable.toString());
+            }
+        }
+        
+        for (AttributeInfo attributeInfo : this.attributeInfoList) {
+            sb.append(attributeInfo.toString());
+            sb.append("\n");
+        }
+        
+        return sb.toString();
+    }
 }

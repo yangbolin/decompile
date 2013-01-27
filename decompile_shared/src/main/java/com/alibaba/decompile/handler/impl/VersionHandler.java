@@ -7,8 +7,8 @@
  */
 package com.alibaba.decompile.handler.impl;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.VersionContext;
 import com.alibaba.decompile.factory.DecompileFactory;
@@ -31,8 +31,8 @@ public class VersionHandler extends DecompileHandler {
         byte[] majorVersionBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.VERSION_NUM_BYTES);
         
         // 2.把字节转换成整数
-        int minorVersion = Integer.valueOf(ByteUtils.bytesToHex(minorVersionBytes), DecompileConstants.HEX_RADIX);
-        int majorVersion = Integer.valueOf(ByteUtils.bytesToHex(majorVersionBytes), DecompileConstants.HEX_RADIX);
+        int minorVersion = ByteUtils.bytesToInt(majorVersionBytes);
+        int majorVersion = ByteUtils.bytesToInt(minorVersionBytes);
         
         // 3.设置版本号上下文
         VersionContext versionContext = new VersionContext();

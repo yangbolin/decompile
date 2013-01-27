@@ -23,8 +23,6 @@ public class ByteCode {
     private boolean hasWide;
     /** 字节码类型 **/
     private int     type;
-    /** 所占字节总数 **/
-    private int     totalBytes;
 
     public int getCode() {
         return code;
@@ -80,16 +78,6 @@ public class ByteCode {
 
     public void setType(int type) {
         this.type = type;
-    }
-
-    
-    public int getTotalBytes() {
-        return totalBytes;
-    }
-
-    
-    public void setTotalBytes(int totalBytes) {
-        this.totalBytes = totalBytes;
     }
 
     @Override

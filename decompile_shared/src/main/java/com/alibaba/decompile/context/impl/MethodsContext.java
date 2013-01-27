@@ -18,31 +18,41 @@ import com.alibaba.decompile.method.Method;
  * 
  * @author yangbolin Dec 26, 2012 8:32:08 PM
  */
-public class MethodsContext extends DecompileContext{
+public class MethodsContext extends DecompileContext {
+
     /** 方法的数目 **/
-    private int methodsCount;
-    
+    private int          methodsCount;
+
     /** 方法列表 **/
     private List<Method> methodList = new ArrayList<Method>();
-    
+
     /** 增加一个方法 **/
     public void addMethod(Method method) {
         this.methodList.add(method);
     }
-    
+
     public int getMemthodsCount() {
         return methodsCount;
     }
-    
+
     public void setMemthodsCount(int methodsCount) {
         this.methodsCount = methodsCount;
     }
-    
+
     public List<Method> getMethodList() {
         return methodList;
     }
-    
+
     public void setMethodList(List<Method> methodList) {
         this.methodList = methodList;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Method method : methodList) {
+            sb.append(method.toString());
+        }
+        return sb.toString();
     }
 }

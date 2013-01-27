@@ -7,9 +7,9 @@
  */
 package com.alibaba.decompile.handler.impl;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.ClassAccessFlag;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.AccessFlagsContext;
 import com.alibaba.decompile.factory.DecompileFactory;
@@ -34,7 +34,7 @@ public class AccessFlagsHandler extends DecompileHandler {
         System.arraycopy(classBytes, byteCodeContext.getCurrentIndex(), accessFlagBytes, 0, DecompileConstants.ACCESS_FLAGS_BYTES);
         byteCodeContext.forwardCurrentIndexSteps(DecompileConstants.ACCESS_FLAGS_BYTES);
         
-        int accessFlagsValue = Integer.valueOf(ByteUtils.bytesToHex(accessFlagBytes), DecompileConstants.HEX_RADIX);
+        int accessFlagsValue = ByteUtils.bytesToInt(accessFlagBytes);
         this.accessFlagsContext = new AccessFlagsContext();
         this.accessFlagsContext.setAccessFlagsValue(accessFlagsValue);
         

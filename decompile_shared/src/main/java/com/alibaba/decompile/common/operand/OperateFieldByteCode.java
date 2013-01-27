@@ -45,7 +45,7 @@ public class OperateFieldByteCode extends ByteCode {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(String.format("%d:\t%s\t#%d;", this.getBaseOffset(), this.getDescriptionString(), this.fieldIndex));
+        sb.append(String.format("%d:\t%s\t#%d;", this.getBaseOffset(), this.getSymbol(), this.fieldIndex));
         sb.append("\t// ");
         sb.append(this.descriptionString);
 

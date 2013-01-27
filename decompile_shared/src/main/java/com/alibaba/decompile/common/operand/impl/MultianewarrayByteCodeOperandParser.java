@@ -8,10 +8,10 @@
 package com.alibaba.decompile.common.operand.impl;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.MultianewarrayByteCode;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.impl.ConstantClassInfo;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
@@ -32,14 +32,10 @@ public class MultianewarrayByteCodeOperandParser implements ByteCodeOperandParse
         MultianewarrayByteCode byteCode = new MultianewarrayByteCode();
         byteCode.setOperandBytes(DecompileConstants.OPERAND_TWO_BYTE);
         
-        int totalBytes = DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE;
-        
         // 1.读取多维数组的类型在常量池中的索引所占的字节数组
         byte[] indexBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int index = Integer.valueOf(ByteUtils.bytesToHex(indexBytes), DecompileConstants.HEX_RADIX);
+        int index = ByteUtils.bytesToInt(indexBytes);
         byteCode.setIndex(index);
-        
-        totalBytes += byteCode.getOperandBytes();
         
         // 2.获取多维数组类型的字符串描述信息
         ConstantPoolContext context = (ConstantPoolContext)decompileFactory.getDecompileContext(DecompileConstants.CONSTANT_POOL_CONTEXT);
@@ -48,13 +44,8 @@ public class MultianewarrayByteCodeOperandParser implements ByteCodeOperandParse
         
         // 3.读取数组维数所占的字节数组
         byte[] dimensionsBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int dimensions = Integer.valueOf(ByteUtils.bytesToHex(dimensionsBytes), DecompileConstants.HEX_RADIX);
+        int dimensions = ByteUtils.bytesToInt(dimensionsBytes);
         byteCode.setDimensions(dimensions);
-        
-        totalBytes += byteCode.getOperandBytes();
-        
-        // 4.设置当前字节码所占的字节总数
-        byteCode.setTotalBytes(totalBytes);
         
         return (ByteCode)byteCode;
     }

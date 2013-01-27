@@ -71,4 +71,16 @@ public class ExceptionsInfo extends AttributeInfo {
     public void setExceptionTypeStringList(List<String> exceptionTypeStringList) {
         this.exceptionTypeStringList = exceptionTypeStringList;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Exceptions:\n");
+        sb.append("[");
+        for (String type : this.exceptionTypeStringList) {
+            sb.append(String.format(" %s ", type));
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 }

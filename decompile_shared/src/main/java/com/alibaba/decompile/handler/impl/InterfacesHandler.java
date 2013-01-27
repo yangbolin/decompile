@@ -9,8 +9,8 @@ package com.alibaba.decompile.handler.impl;
 
 import java.util.List;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
 import com.alibaba.decompile.context.impl.InterfacesContext;
@@ -36,7 +36,7 @@ public class InterfacesHandler extends DecompileHandler {
         
         this.intefacesContext = new InterfacesContext();
         
-        int count = Integer.valueOf(ByteUtils.bytesToHex(countBytes), DecompileConstants.HEX_RADIX);
+        int count = ByteUtils.bytesToInt(countBytes);
         this.intefacesContext.setCount(count);
         
         ConstantPoolContext constantPoolContext = (ConstantPoolContext)decompileFactory.getDecompileContext(DecompileConstants.CONSTANT_POOL_CONTEXT);
@@ -45,7 +45,7 @@ public class InterfacesHandler extends DecompileHandler {
         for (int i = 0; i < count; ++i) {
             byte[] qualifiedNameBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.INTERFACE_QUALIFIED_NAME_BYTES);
 
-            int index = Integer.valueOf(ByteUtils.bytesToHex(qualifiedNameBytes), DecompileConstants.HEX_RADIX);
+            int index = ByteUtils.bytesToInt(qualifiedNameBytes);
             this.intefacesContext.addIndex(index);
             String qualifiedName = constantPoolContext.getClassQualifiedName(index);
             if (qualifiedName != null) {

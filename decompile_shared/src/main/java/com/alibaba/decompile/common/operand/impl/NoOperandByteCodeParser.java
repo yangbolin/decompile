@@ -8,7 +8,6 @@
 package com.alibaba.decompile.common.operand.impl;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.factory.DecompileFactory;
@@ -27,9 +26,6 @@ public class NoOperandByteCodeParser implements ByteCodeOperandParser {
     @Override
     public ByteCode parse(ByteCodeContext byteCodeContext, DecompileFactory decompileFactory) {
         ByteCode byteCode = new ByteCode();
-        
-        byteCode.setTotalBytes(DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE);
-        
         return byteCode;
     }
 }

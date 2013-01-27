@@ -33,6 +33,8 @@ public interface DecompileConstants {
     int    CONSTANT_NUM_BYTES                         = 2;
     /** 十六进制 **/
     int    HEX_RADIX                                  = 16;
+    /** 常量标记所占的字节数目 **/
+    int    CONSTANT_TAG_BYTE                          = 1;
     /** 常量池中对应UTF8缩略码的字符串TAG **/
     int    CONSTANT_UTF8_STR_TAG                      = 1;
     /** 常量池中整型字面量的TAG **/
@@ -147,4 +149,20 @@ public interface DecompileConstants {
     int    CODE_LINE_NUMBER_TABLE_BYTE                = 2;
     /** LocalVariableTable属性相关的属性所占的字节数目 **/
     int    CODE_LOCAL_VARIABLE_TABLE_BYTE             = 2;
+    /** frame的tag标记所占的字节数目 **/
+    int    FRAME_TAG_BYTES                            = 1;
+    /** frame的偏移量所占的字节数目 **/
+    int    FRAME_OFFSET_BYTES                         = 2;
+    /** frame的类型索引所占的字节数目 **/
+    int    FRAME_TYPE_INFO_BYTES                      = 1;
+    /** frame的数目 **/
+    int    FRAME_ENTRIES_BYTES                        = 2;
+    /** 局部变量所在slot所占的字节数 **/
+    int    LOCAL_VARIABLE_SLOT_BYTES                  = 2;
+    /** 附加属性所占的字节数 **/
+    int    ATTACH_ATTRIBUTE_NUM_BYTES                 = 2;
+    /** 源文件名称索引在常量池中索引所占的字节数组 **/
+    int    SOURCE_FILE_INDEX_BYTES                    = 2;
+    /** 内部类相关信息所占的字节数目 **/
+    int    INNER_CLASSES_BYTES                        = 2;
 }

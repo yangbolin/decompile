@@ -8,10 +8,10 @@
 package com.alibaba.decompile.common.operand.impl;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.IincByteCode;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.factory.DecompileFactory;
 
@@ -66,7 +66,6 @@ public class IincByteCodeOperandParser implements ByteCodeOperandParser {
         // 0.创建返回值对象
         IincByteCode byteCode = new IincByteCode();
         
-        int totalBytes = DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE;
         
         // 1.判断操作数所占的字节数目 
         if (byteCodeContext.isHasWide()) {
@@ -74,28 +73,19 @@ public class IincByteCodeOperandParser implements ByteCodeOperandParser {
             byteCode.setHasWide(true);
             byteCodeContext.setHasWide(false);      //  一次使用后马上还原
             
-            // 该字节码前面有wide字节码
-            totalBytes += DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE;        
         } else {
             byteCode.setOperandBytes(DecompileConstants.OPERAND_ONE_BYTE);
         }
         
         // 2.读取操作数之本地变量的索引
         byte[] indexBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int index = Integer.valueOf(ByteUtils.bytesToHex(indexBytes), DecompileConstants.HEX_RADIX);
+        int index = ByteUtils.bytesToInt(indexBytes);
         byteCode.setIndex(index);
-        
-        totalBytes += byteCode.getOperandBytes();
         
         // 3.读取需要增加的常量值
         byte[] constValueBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int constValue = Integer.valueOf(ByteUtils.bytesToHex(constValueBytes), DecompileConstants.HEX_RADIX);
+        int constValue = ByteUtils.bytesToInt(constValueBytes);
         byteCode.setConstValue(constValue);
-        
-        totalBytes += byteCode.getOperandBytes();
-        
-        // 4.设置当前字节码所占的字节数目
-        byteCode.setTotalBytes(totalBytes);
         
         return (ByteCode)byteCode;
     }

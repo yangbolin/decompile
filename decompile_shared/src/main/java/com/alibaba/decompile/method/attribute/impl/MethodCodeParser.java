@@ -12,9 +12,9 @@ import com.alibaba.decompile.attribute.info.AttributeInfo;
 import com.alibaba.decompile.attribute.info.CodeInfo;
 import com.alibaba.decompile.common.ArrtibuteParser;
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParserFactory;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.impl.ConstantClassInfo;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.JVMByteCodeContext;
@@ -44,26 +44,27 @@ public class MethodCodeParser implements ArrtibuteParser {
 
         // 1.读取属性的长度所占的字节数目
         byte[] attributeLengthBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.ATTRIBUTE_LENGTH_BYTES);
-        int attributeLength = Integer.valueOf(ByteUtils.bytesToHex(attributeLengthBytes), DecompileConstants.HEX_RADIX);
+        int attributeLength = ByteUtils.bytesToInt(attributeLengthBytes);
         codeInfo.setAttributeLength(attributeLength);
 
         // 2.读取方法的max_stack所占的字节数组
         byte[] maxStackBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.METHOD_MAX_STACK_BYTE);
-        int maxStack = Integer.valueOf(ByteUtils.bytesToHex(maxStackBytes), DecompileConstants.HEX_RADIX);
+        int maxStack = ByteUtils.bytesToInt(maxStackBytes);
         codeInfo.setMaxStack(maxStack);
 
         // 3.读取方法的max_locals所占字节数组
         byte[] maxLocalsBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.METHOD_MAX_LOCALS_BYTE);
-        int maxLocals = Integer.valueOf(ByteUtils.bytesToHex(maxLocalsBytes), DecompileConstants.HEX_RADIX);
+        int maxLocals = ByteUtils.bytesToInt(maxLocalsBytes);
         codeInfo.setMaxLocals(maxLocals);
 
         // 4.读取code_length所占的字节数组
         byte[] codeLengthBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.METHOD_CODE_LENGTH_BYTE);
-        int codeLength = Integer.valueOf(ByteUtils.bytesToHex(codeLengthBytes), DecompileConstants.HEX_RADIX);
+        int codeLength = ByteUtils.bytesToInt(codeLengthBytes);
         codeInfo.setCodeLength(codeLength);
 
         // 5.字节码的解析
-        int currentIndex = 0;
+        int baseIndex = byteCodeContext.getCurrentIndex();
+        int currentIndex = byteCodeContext.getCurrentIndex() - baseIndex;
         JVMByteCodeContext jvmByteCodeContext = decompileFactory.getJvmByteCodeContext();
 
         /**
@@ -77,7 +78,7 @@ public class MethodCodeParser implements ArrtibuteParser {
         while (currentIndex < codeLength) {
             // 5.0 读取字节码的code所占字节数组
             byte[] codeBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE);
-            int code = Integer.valueOf(ByteUtils.bytesToHex(codeBytes), DecompileConstants.HEX_RADIX);
+            int code = ByteUtils.bytesToInt(codeBytes);
 
             // 5.1 设置字节码是否有wide修饰
             ByteCode byteCode = jvmByteCodeContext.findByteCodeByCode(code);
@@ -95,7 +96,7 @@ public class MethodCodeParser implements ArrtibuteParser {
             parsedByteCode.setType(byteCode.getType());
 
             // 5.3 修改偏移地址
-            currentIndex += parsedByteCode.getTotalBytes();
+            currentIndex = byteCodeContext.getCurrentIndex() - baseIndex;
 
             codeInfo.addByteCode(parsedByteCode);
         }
@@ -105,50 +106,51 @@ public class MethodCodeParser implements ArrtibuteParser {
         // 6.异常的解析
         // 6.0 读取异常处理表的数目
         byte[] exceptionsTableLengthBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.EXCEPTIONS_TABLE_BYTE);
-        int exceptionsTableLength = Integer.valueOf(ByteUtils.bytesToHex(exceptionsTableLengthBytes),
-                                                    DecompileConstants.HEX_RADIX);
+        int exceptionsTableLength = ByteUtils.bytesToInt(exceptionsTableLengthBytes);
         codeInfo.setExceptionsTableLength(exceptionsTableLength);
 
         // 6.1 读取异常处理
         for (int i = 0; i < exceptionsTableLength; ++i) {
             ExceptionsTable exceptionsTable = new ExceptionsTable();
             byte[] startPCBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.EXCEPTIONS_TABLE_BYTE);
-            int startPC = Integer.valueOf(ByteUtils.bytesToHex(startPCBytes), DecompileConstants.HEX_RADIX);
+            int startPC = ByteUtils.bytesToInt(startPCBytes);
             exceptionsTable.setStartPC(startPC);
 
             byte[] endPCBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.EXCEPTIONS_TABLE_BYTE);
-            int endPC = Integer.valueOf(ByteUtils.bytesToHex(endPCBytes), DecompileConstants.HEX_RADIX);
+            int endPC = ByteUtils.bytesToInt(endPCBytes);
             exceptionsTable.setEndPC(endPC);
 
             byte[] handlerPCBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.EXCEPTIONS_TABLE_BYTE);
-            int handlerPC = Integer.valueOf(ByteUtils.bytesToHex(handlerPCBytes), DecompileConstants.HEX_RADIX);
+            int handlerPC = ByteUtils.bytesToInt(handlerPCBytes);
             exceptionsTable.setHandlerPC(handlerPC);
 
             byte[] catchTypeBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.EXCEPTIONS_TABLE_BYTE);
-            int catchType = Integer.valueOf(ByteUtils.bytesToHex(catchTypeBytes), DecompileConstants.HEX_RADIX);
+            int catchType = ByteUtils.bytesToInt(catchTypeBytes);
             exceptionsTable.setCatchType(catchType);
 
-            ConstantClassInfo constantClassInfo = (ConstantClassInfo) constantPoolContext.getConstantInfoByIndex(catchType - 1);
-            exceptionsTable.setCatchTypeString(constantClassInfo.getStringDescription());
-
+            if (catchType == 0) {
+                exceptionsTable.setCatchTypeString("any");
+            } else {
+                ConstantClassInfo constantClassInfo = (ConstantClassInfo) constantPoolContext.getConstantInfoByIndex(catchType - 1);
+                exceptionsTable.setCatchTypeString(constantClassInfo.getStringDescription());
+            }
+            
             codeInfo.addExceptionsTable(exceptionsTable);
         }
 
         // 7.读取code属性的附加属性数目
         byte[] codeInfoAttributesLengthBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.CODE_INFO_ATTRIBUTE_LENGTH_BYTE);
-        int codeInfoAttributeLength = Integer.valueOf(ByteUtils.bytesToHex(codeInfoAttributesLengthBytes),
-                                                      DecompileConstants.HEX_RADIX);
+        int codeInfoAttributeLength = ByteUtils.bytesToInt(codeInfoAttributesLengthBytes);
         codeInfo.setAttributeLength(codeInfoAttributeLength);
 
         // 8.依次读取每一个附加属性
         for (int j = 0; j < codeInfoAttributeLength; ++j) {
             // 8.0 解析属性名称索引所占的字节数组
             byte[] attributeNameIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.ATTRIBUTE_NAME_INDEX_BYTES);
-            int attributeNameIndex = Integer.valueOf(ByteUtils.bytesToHex(attributeNameIndexBytes),
-                                                     DecompileConstants.HEX_RADIX);
+            int attributeNameIndex = ByteUtils.bytesToInt(attributeNameIndexBytes);
 
             // 8.1 获取属性名称对应的属性解析器
-            String attributeName = constantPoolContext.getUTF8tringByIndex(attributeNameIndex - 1);
+            String attributeName = constantPoolContext.getUTF8tringByIndex(attributeNameIndex);
             AttributeInfo attributeInfo = ParseMethodAttributeFactory.getSpecParser(attributeName).parse(byteCodeContext,
                                                                                                          decompileFactory);
 

@@ -10,8 +10,8 @@ package com.alibaba.decompile.method.attribute.impl;
 import com.alibaba.decompile.attribute.info.AttributeInfo;
 import com.alibaba.decompile.attribute.info.LineNumberTableInfo;
 import com.alibaba.decompile.common.ArrtibuteParser;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.factory.DecompileFactory;
 
@@ -31,23 +31,23 @@ public class LineNumberTableParser implements ArrtibuteParser {
         
         // 1.读取属性的长度所占的字节数组
         byte[] attributeLengthBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.ATTRIBUTE_LENGTH_BYTES);
-        int attributeLength = Integer.valueOf(ByteUtils.bytesToHex(attributeLengthBytes), DecompileConstants.HEX_RADIX);
+        int attributeLength = ByteUtils.bytesToInt(attributeLengthBytes);
         lineNumberTableInfo.setAttributeLength(attributeLength);
         
         // 2.读取start_pc和line_number之间对应关系的数目
         byte[] lineNumberTableLengthBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.CODE_LINE_NUMBER_TABLE_BYTE);
-        int lineNumberTableLength = Integer.valueOf(ByteUtils.bytesToHex(lineNumberTableLengthBytes), DecompileConstants.CODE_LINE_NUMBER_TABLE_BYTE);
+        int lineNumberTableLength = ByteUtils.bytesToInt(lineNumberTableLengthBytes);
         lineNumberTableInfo.setLineNumberTableLength(lineNumberTableLength);
         
         // 3.依次读取每一个字节码和源代码行号的对应记录
         for (int i = 0; i < lineNumberTableLength; ++i) {
             // 3.0 读取start_pc所占的字节数组
             byte[] startPCBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.CODE_LINE_NUMBER_TABLE_BYTE);
-            int startPC = Integer.valueOf(ByteUtils.bytesToHex(startPCBytes), DecompileConstants.HEX_RADIX);
+            int startPC = ByteUtils.bytesToInt(startPCBytes);
             
             // 3.1 读取line_number所占的字节数组
             byte[] lineNumberBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.CODE_LINE_NUMBER_TABLE_BYTE);
-            int lineNumber = Integer.valueOf(ByteUtils.bytesToHex(lineNumberBytes), DecompileConstants.HEX_RADIX);
+            int lineNumber = ByteUtils.bytesToInt(lineNumberBytes);
             
             lineNumberTableInfo.addPcNumberMap(startPC, lineNumber);
         }

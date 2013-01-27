@@ -7,8 +7,8 @@
  */
 package com.alibaba.decompile.handler.impl;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ClassContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
@@ -33,8 +33,8 @@ public class ClassHandler extends DecompileHandler {
         byte[] thisClassBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.THIS_CLASS_QUALIFIED_NAME_BYTES);
         byte[] superClassBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.SUPER_CLASS_QUALIFIED_NAME_BYTES);
         
-        int thisClassIndex = Integer.valueOf(ByteUtils.bytesToHex(thisClassBytes), DecompileConstants.HEX_RADIX);
-        int superClassIndex = Integer.valueOf(ByteUtils.bytesToHex(superClassBytes), DecompileConstants.HEX_RADIX);
+        int thisClassIndex = ByteUtils.bytesToInt(thisClassBytes);
+        int superClassIndex = ByteUtils.bytesToInt(superClassBytes);
         
         this.classContext = new ClassContext();
         this.classContext.setThisClassIndex(thisClassIndex);

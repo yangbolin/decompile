@@ -7,8 +7,8 @@
  */
 package com.alibaba.decompile.constant.pool.parser;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.ConstantInfo;
 import com.alibaba.decompile.constant.pool.ConstantInfoParser;
 import com.alibaba.decompile.constant.pool.ConstantType;
@@ -40,7 +40,7 @@ public class ConstantClassInfoParser implements ConstantInfoParser {
         byte[] indexBytes = byteCodeContext.getSpecifiedByteCodeArray(constantInfo.getIndexByteNum());
         
         // 3. bytes to int
-        int index = Integer.valueOf(ByteUtils.bytesToHex(indexBytes), DecompileConstants.HEX_RADIX);
+        int index = ByteUtils.bytesToInt(indexBytes);
         constantInfo.setIndexValue(index);
         
         return (ConstantInfo) constantInfo;

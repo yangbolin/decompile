@@ -7,8 +7,8 @@
  */
 package com.alibaba.decompile.constant.pool.parser;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.ConstantInfo;
 import com.alibaba.decompile.constant.pool.ConstantInfoParser;
 import com.alibaba.decompile.constant.pool.ConstantType;
@@ -36,7 +36,7 @@ public class ConstantStringInfoParser implements ConstantInfoParser {
         
         // 1.读取String类型的常量在常量池中的索引所占的字节数组
         byte[] indexBytes = byteCodeContext.getSpecifiedByteCodeArray(constantInfo.getIndexByteNum());
-        int index = Integer.valueOf(ByteUtils.bytesToHex(indexBytes), DecompileConstants.HEX_RADIX);
+        int index = ByteUtils.bytesToInt(indexBytes);
         constantInfo.setIndexValue(index);
         
         return (ConstantInfo)constantInfo;

@@ -13,9 +13,9 @@ import com.alibaba.decompile.attribute.info.AttributeInfo;
 import com.alibaba.decompile.attribute.info.ConstantValueInfo;
 import com.alibaba.decompile.attribute.info.DeprecatedInfo;
 import com.alibaba.decompile.attribute.info.SyntheticInfo;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.FieldAccessFlag;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
 import com.alibaba.decompile.context.impl.FieldsContext;
@@ -46,7 +46,7 @@ public class FieldsHandler extends DecompileHandler {
         this.fieldsContext = new FieldsContext();
         
         // 1.把字段的数目设置到字段上下文中
-        int fieldCount = Integer.valueOf(ByteUtils.bytesToHex(fieldCountBytes), DecompileConstants.HEX_RADIX);
+        int fieldCount = ByteUtils.bytesToInt(fieldCountBytes);
         this.fieldsContext.setFieldCount(fieldCount);
         
         // 2.依次从字节码文件中读取每一个字段
@@ -78,7 +78,7 @@ public class FieldsHandler extends DecompileHandler {
         // 0.字段访问标记的处理，其实就是字段的访问权限
         byte[] fieldAccessFlagsBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.ACCESS_FLAGS_BYTES);
         
-        int fieldAccessFlags = Integer.valueOf(ByteUtils.bytesToHex(fieldAccessFlagsBytes), DecompileConstants.HEX_RADIX);
+        int fieldAccessFlags = ByteUtils.bytesToInt(fieldAccessFlagsBytes);
         for (FieldAccessFlag accessFlag : FieldAccessFlag.values()) {
             if ((fieldAccessFlags & accessFlag.getFlagValue()) != 0) {
                 field.addAccessFlag(accessFlag);
@@ -89,26 +89,26 @@ public class FieldsHandler extends DecompileHandler {
         
         // 1.字段名称索引处理
         byte[] nameIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.FIELD_NAME_INDEX_COUNT);
-        field.setNameIndex(Integer.valueOf(ByteUtils.bytesToHex(nameIndexBytes), DecompileConstants.HEX_RADIX));
+        field.setNameIndex(ByteUtils.bytesToInt(nameIndexBytes));
         field.setFieldName(constantPoolContext.getUTF8tringByIndex(field.getNameIndex()));
         
         // 2.字段描述符的处理
         byte[] descriptorIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.FIELD_DESCRIPTOR_INDEX_BYTES);
-        field.setDescriptorIndex(Integer.valueOf(ByteUtils.bytesToHex(descriptorIndexBytes), DecompileConstants.HEX_RADIX));
+        field.setDescriptorIndex(ByteUtils.bytesToInt(descriptorIndexBytes));
         field.setDescriptorName(constantPoolContext.getUTF8tringByIndex(field.getDescriptorIndex()));
         
         // 3.字段的属性表解析，关于字段的属性表中可能存储了一些字段的其他属性，比如如果这个字段是final类型的，final标志就会出现在字段的属性表中
         byte[] attributesCountBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.FIELD_ATTRIBUTES_COUNT_BYTES);
         
         // 4.把字节码转换成表示属性数目的整型数字
-        int attributeCount = Integer.valueOf(ByteUtils.bytesToHex(attributesCountBytes), DecompileConstants.HEX_RADIX);
+        int attributeCount = ByteUtils.bytesToInt(attributesCountBytes);
         field.setAttributeCount(attributeCount);
         
         // 5.解析字段的属性
         for (int i = 0; i < attributeCount; ++i) {
             // 5.1根据属性名称的index在常量池中找到属性名称
             byte[] attributeNameIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.ATTRIBUTE_NAME_INDEX_BYTES);
-            int attributeNameIndex = Integer.valueOf(ByteUtils.bytesToHex(attributeNameIndexBytes), DecompileConstants.HEX_RADIX);
+            int attributeNameIndex = ByteUtils.bytesToInt(attributeNameIndexBytes);
             
             String attributeName = constantPoolContext.getUTF8tringByIndex(attributeNameIndex);
             

@@ -12,10 +12,12 @@ import java.util.Map;
 
 import com.alibaba.decompile.common.operand.impl.AnewarrayByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.impl.IincByteCodeOperandParser;
+import com.alibaba.decompile.common.operand.impl.InvokeInterfaceMethodByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.impl.InvokeMethodByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.impl.LookupSwitchByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.impl.MultianewarrayByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.impl.NewByteCodeOperandParser;
+import com.alibaba.decompile.common.operand.impl.NewarrayByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.impl.NoOperandByteCodeParser;
 import com.alibaba.decompile.common.operand.impl.OnlyClassIndexByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.impl.OperateFieldByteCodeOperandParser;
@@ -45,12 +47,15 @@ public class ByteCodeOperandParserFactory {
         parserMap.put(ByteCodeOperandType.SPECIAL_LOOKUPSWITCH.getIntValue(), new LookupSwitchByteCodeOperandParser());
         parserMap.put(ByteCodeOperandType.SPECIAL_OPERATEFIELD.getIntValue(), new OperateFieldByteCodeOperandParser());
         parserMap.put(ByteCodeOperandType.SPECIAL_INVOKE_METHOD.getIntValue(), new InvokeMethodByteCodeOperandParser());
+        parserMap.put(ByteCodeOperandType.SPECIAL_INVOKE_INTERFACE_METHOD.getIntValue(),
+                      new InvokeInterfaceMethodByteCodeOperandParser());
         parserMap.put(ByteCodeOperandType.SPECIAL_NEW.getIntValue(), new NewByteCodeOperandParser());
-        parserMap.put(ByteCodeOperandType.SPECIAL_NEWARRAY.getIntValue(), new NewByteCodeOperandParser());
+        parserMap.put(ByteCodeOperandType.SPECIAL_NEWARRAY.getIntValue(), new NewarrayByteCodeOperandParser());
         parserMap.put(ByteCodeOperandType.SPECIAL_ANEWARRAY.getIntValue(), new AnewarrayByteCodeOperandParser());
         parserMap.put(ByteCodeOperandType.SPECIAL_MULTIANEWARRAY.getIntValue(),
                       new MultianewarrayByteCodeOperandParser());
-        parserMap.put(ByteCodeOperandType.SPECAIL_ONLYCLASSINDEX.getIntValue(), new OnlyClassIndexByteCodeOperandParser());
+        parserMap.put(ByteCodeOperandType.SPECAIL_ONLYCLASSINDEX.getIntValue(),
+                      new OnlyClassIndexByteCodeOperandParser());
         parserMap.put(ByteCodeOperandType.SPECIAL_SKIPWIDEBYTE.getIntValue(), new SkipByteCodeOperandParser());
     }
 

@@ -8,10 +8,10 @@
 package com.alibaba.decompile.common.operand.impl;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.OnlyClassIndexByteCode;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.impl.ConstantClassInfo;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
@@ -34,16 +34,13 @@ public class OnlyClassIndexByteCodeOperandParser implements ByteCodeOperandParse
         
         // 1.读取类型索引所占的字节数组
         byte[] indexBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int index = Integer.valueOf(ByteUtils.bytesToHex(indexBytes), DecompileConstants.HEX_RADIX);
+        int index = ByteUtils.bytesToInt(indexBytes);
         byteCode.setIndex(index);
         
         // 2.获取类型的描述字符串
         ConstantPoolContext context = (ConstantPoolContext)decompileFactory.getDecompileContext(DecompileConstants.CONSTANT_POOL_CONTEXT);
         ConstantClassInfo constantClassInfo = (ConstantClassInfo)context.getConstantInfoByIndex(index - 1);
         byteCode.setDescriptionString(constantClassInfo.getStringDescription());
-        
-        // 3.设置当前字节码所占的字节总数
-        byteCode.setTotalBytes(DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE);
         
         return (ByteCode)byteCode;
     }

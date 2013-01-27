@@ -10,8 +10,8 @@ package com.alibaba.decompile.field.attribute.impl;
 import com.alibaba.decompile.attribute.info.AttributeInfo;
 import com.alibaba.decompile.attribute.info.ConstantValueInfo;
 import com.alibaba.decompile.common.ArrtibuteParser;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
 import com.alibaba.decompile.factory.DecompileFactory;
@@ -37,7 +37,7 @@ public class FieldConstantValueParser implements ArrtibuteParser {
         byte[] attributeLengthBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.ATTRIBUTE_LENGTH_BYTES);
 
         // 2.计算属性的长度
-        int attributeLength = Integer.valueOf(ByteUtils.bytesToHex(attributeLengthBytes), DecompileConstants.HEX_RADIX);
+        int attributeLength = ByteUtils.bytesToInt(attributeLengthBytes);
         if (attributeLength != 2) {
             System.out.println("The length of constantvalue attribute is not equal to 2");
             return null;
@@ -47,7 +47,7 @@ public class FieldConstantValueParser implements ArrtibuteParser {
         // 4.读取一个常量池中的索引
         byte[] constantValueIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.CONSTANT_VALUE_INDEX_BYTES);
         
-        int constantValueIndex = Integer.valueOf(ByteUtils.bytesToHex(constantValueIndexBytes), DecompileConstants.HEX_RADIX);
+        int constantValueIndex = ByteUtils.bytesToInt(constantValueIndexBytes);
         ((ConstantValueInfo)attributeInfo).setConstantValueIndex(constantValueIndex);
         
         // 5.获取常量池中对应的字面常量

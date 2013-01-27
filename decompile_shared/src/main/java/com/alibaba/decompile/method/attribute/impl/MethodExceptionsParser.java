@@ -10,8 +10,8 @@ package com.alibaba.decompile.method.attribute.impl;
 import com.alibaba.decompile.attribute.info.AttributeInfo;
 import com.alibaba.decompile.attribute.info.ExceptionsInfo;
 import com.alibaba.decompile.common.ArrtibuteParser;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.impl.ConstantClassInfo;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
@@ -31,12 +31,12 @@ public class MethodExceptionsParser implements ArrtibuteParser {
         
         // 1.读取属性长度所占的字节数组
         byte[] attributeLengthBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.ATTRIBUTE_LENGTH_BYTES);
-        int attributeLength = Integer.valueOf(ByteUtils.bytesToHex(attributeLengthBytes), DecompileConstants.HEX_RADIX);
+        int attributeLength = ByteUtils.bytesToInt(attributeLengthBytes);
         exceptionsInfo.setAttributeLength(attributeLength);
         
         // 2.读取异常数目所占的字节数组
         byte[] numberOfExceptionsBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.METHOD_EXCEPTIONS_ATTRIBUTE_BYTE);
-        int numberOfExceptions = Integer.valueOf(ByteUtils.bytesToHex(numberOfExceptionsBytes), DecompileConstants.HEX_RADIX);
+        int numberOfExceptions = ByteUtils.bytesToInt(numberOfExceptionsBytes);
         exceptionsInfo.setNumberOfExceptions(numberOfExceptions);
         
         ConstantPoolContext constantPoolContext = (ConstantPoolContext)decompileFactory.getDecompileContext(DecompileConstants.CONSTANT_POOL_CONTEXT);
@@ -45,7 +45,7 @@ public class MethodExceptionsParser implements ArrtibuteParser {
         for (int i = 0; i < numberOfExceptions; ++i) {
             // 3.0 读取异常类型索引所占的字节数组
             byte[] exceptionIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.METHOD_EXCEPTIONS_ATTRIBUTE_BYTE);
-            int exceptionsIndex = Integer.valueOf(ByteUtils.bytesToHex(exceptionIndexBytes), DecompileConstants.HEX_RADIX);
+            int exceptionsIndex = ByteUtils.bytesToInt(exceptionIndexBytes);
             exceptionsInfo.addIndex(exceptionsIndex);
             
             // 3.1 读取类型描述符

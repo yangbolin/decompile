@@ -21,7 +21,7 @@ import org.w3c.dom.NodeList;
 
 import com.alibaba.decompile.common.ByteCode;
 import com.alibaba.decompile.common.DecompileConstants;
-import com.alibaba.decompile.common.DecompileUtils;
+import com.alibaba.decompile.common.utils.DecompileUtils;
 
 /**
  * 类ReadByteCodeFile.java的实现描述：读取字节码的XML文件

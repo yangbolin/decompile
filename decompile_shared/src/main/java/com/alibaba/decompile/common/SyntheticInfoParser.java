@@ -9,6 +9,7 @@ package com.alibaba.decompile.common;
 
 import com.alibaba.decompile.attribute.info.AttributeInfo;
 import com.alibaba.decompile.attribute.info.SyntheticInfo;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.factory.DecompileFactory;
 
@@ -36,7 +37,7 @@ public class SyntheticInfoParser implements ArrtibuteParser {
         byte[] attributeLengthBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.ATTRIBUTE_LENGTH_BYTES);
 
         // 2.把字节码转换成整型的长度
-        int attributeLength = Integer.valueOf(ByteUtils.bytesToHex(attributeLengthBytes), DecompileConstants.HEX_RADIX);
+        int attributeLength = ByteUtils.bytesToInt(attributeLengthBytes);
         if (attributeLength != 0) {
             System.out.println("The length of synthetic-attribute is not zero!");
             return null;

@@ -8,10 +8,10 @@
 package com.alibaba.decompile.common.operand.impl;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.InvokeInterfaceMethodByteCode;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.impl.ConstantInterfaceMethodInfo;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
@@ -32,16 +32,11 @@ public class InvokeInterfaceMethodByteCodeOperandParser implements ByteCodeOpera
         InvokeInterfaceMethodByteCode byteCode = new InvokeInterfaceMethodByteCode();
         byteCode.setOperandBytes(DecompileConstants.OPERAND_TWO_BYTE);
         
-        int totalBytes = DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE;
-        
-
         // 1.读取常量池中的方法索引所占的字节数组
         byte[] indexBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int index = Integer.valueOf(ByteUtils.bytesToHex(indexBytes), DecompileConstants.HEX_RADIX);
+        int index = ByteUtils.bytesToInt(indexBytes);
         byteCode.setIndex(index);
         
-        totalBytes+= byteCode.getOperandBytes();
-
         // 2.读取常量池中方法的描述字符串
         ConstantPoolContext constantPoolContext = (ConstantPoolContext) decompileFactory.getDecompileContext(DecompileConstants.CONSTANT_POOL_CONTEXT);
         ConstantInterfaceMethodInfo constantInterfaceMethodInfo = (ConstantInterfaceMethodInfo) constantPoolContext.getConstantInfoByIndex(index - 1);
@@ -49,20 +44,13 @@ public class InvokeInterfaceMethodByteCodeOperandParser implements ByteCodeOpera
 
         // 2.读取count字段
         byte[] countBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.OPERAND_ONE_BYTE);
-        int count = Integer.valueOf(ByteUtils.bytesToHex(countBytes), DecompileConstants.HEX_RADIX);
+        int count = ByteUtils.bytesToInt(countBytes);
         byteCode.setCount(count);
         
-        totalBytes += DecompileConstants.OPERAND_ONE_BYTE;
-
         // 3.读取0字段
         byte[] zeroBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.OPERAND_ONE_BYTE);
-        int zero = Integer.valueOf(ByteUtils.bytesToHex(zeroBytes), DecompileConstants.HEX_RADIX);
+        int zero = ByteUtils.bytesToInt(zeroBytes);
         byteCode.setZero(zero);
-        
-        totalBytes += DecompileConstants.OPERAND_ONE_BYTE;
-        
-        // 4.设置当前字节码所占字节总数
-        byteCode.setTotalBytes(totalBytes);
         
         return (ByteCode) byteCode;
     }

@@ -11,10 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.NewarrayByteCode;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.factory.DecompileFactory;
 
@@ -49,12 +49,9 @@ public class NewarrayByteCodeOperandParser implements ByteCodeOperandParser {
 
         // 1.读取类型对应数字所占的字节数组
         byte[] typeBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int type = Integer.valueOf(ByteUtils.bytesToHex(typeBytes), DecompileConstants.HEX_RADIX);
+        int type = ByteUtils.bytesToInt(typeBytes);
         byteCode.setTypeString(typeMap.get(type));
 
-        // 2.设置当前字节码所占的字节总数
-        byteCode.setTotalBytes(DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE + byteCode.getOperandBytes());
-        
         return (ByteCode) byteCode;
     }
 }

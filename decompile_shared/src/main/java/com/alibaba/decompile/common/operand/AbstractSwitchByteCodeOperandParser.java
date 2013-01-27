@@ -7,8 +7,8 @@
  */
 package com.alibaba.decompile.common.operand;
 
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 
 /**
@@ -29,10 +29,10 @@ public abstract class AbstractSwitchByteCodeOperandParser {
      * @return
      */
     protected int parsePaddingBytes(ByteCodeContext byteCodeContext) {
-        int padBytesNum = byteCodeContext.getCurrentIndex() % 4;
+        int padBytesNum = 4 - byteCodeContext.getCurrentIndex() % 4;
         if (padBytesNum != 0) {
             byte[] padBytes = byteCodeContext.getSpecifiedByteCodeArray(padBytesNum);
-            if (Integer.valueOf(ByteUtils.bytesToHex(padBytes), DecompileConstants.HEX_RADIX) != 0) {
+            if (ByteUtils.bytesToInt(padBytes) != 0) {
                 return -1;
             }
         }
@@ -49,7 +49,7 @@ public abstract class AbstractSwitchByteCodeOperandParser {
      */
     protected int parseDefaultOffset(ByteCodeContext byteCodeContext) {
         byte[] defaultOffsetBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.OPERAND_FOUR_BYTE);
-        int defaultOffset = Integer.valueOf(ByteUtils.bytesToHex(defaultOffsetBytes), DecompileConstants.HEX_RADIX);
+        int defaultOffset = ByteUtils.bytesToInt(defaultOffsetBytes);
         return defaultOffset;
     }
 }

@@ -8,9 +8,9 @@
 package com.alibaba.decompile.handler.impl;
 
 import com.alibaba.decompile.attribute.info.AttributeInfo;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.MethodAccessFlag;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
 import com.alibaba.decompile.context.impl.MethodsContext;
@@ -31,6 +31,9 @@ public class MethodsHandler extends DecompileHandler {
 
     @Override
     public void parse(ByteCodeContext byteCodeContext, DecompileFactory decompileFactory) {
+        
+        System.out.println("***PARSE METHOD IN CURRENT CLASSS***");
+        
         // 0.创建方法上下文获取常量池上下文方便使用
         this.methodsContext = new MethodsContext();
         ConstantPoolContext constantPoolContext = (ConstantPoolContext) decompileFactory.getDecompileContext(DecompileConstants.CONSTANT_POOL_CONTEXT);
@@ -38,7 +41,7 @@ public class MethodsHandler extends DecompileHandler {
         // 1.读取表示方法数目的字节码数组
         byte[] methodsCountBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.METHODS_COUNT_BYTES);
 
-        int methodsCount = Integer.valueOf(ByteUtils.bytesToHex(methodsCountBytes), DecompileConstants.HEX_RADIX);
+        int methodsCount = ByteUtils.bytesToInt(methodsCountBytes);
         this.methodsContext.setMemthodsCount(methodsCount);
 
         // 2.依次解析每个方法
@@ -47,7 +50,7 @@ public class MethodsHandler extends DecompileHandler {
 
             // 2.1解析方法的访问权限
             byte[] accessFlagsBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.METHODS_COUNT_BYTES);
-            int accessFlags = Integer.valueOf(ByteUtils.bytesToHex(accessFlagsBytes), DecompileConstants.HEX_RADIX);
+            int accessFlags = ByteUtils.bytesToInt(accessFlagsBytes);
 
             for (MethodAccessFlag methodAccessFlag : MethodAccessFlag.values()) {
                 if ((methodAccessFlag.getFlagValue() & accessFlags) != 0) {
@@ -57,7 +60,7 @@ public class MethodsHandler extends DecompileHandler {
 
             // 2.2 解析方法名称的索引
             byte[] nameIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.METHOD_NAME_INDEX_BYTES);
-            int nameIndex = Integer.valueOf(ByteUtils.bytesToHex(nameIndexBytes), DecompileConstants.HEX_RADIX);
+            int nameIndex = ByteUtils.bytesToInt(nameIndexBytes);
 
             String methodName = constantPoolContext.getUTF8tringByIndex(nameIndex);
             method.setNameIndex(nameIndex);
@@ -65,24 +68,21 @@ public class MethodsHandler extends DecompileHandler {
 
             // 2.3 解析方法的描述符
             byte[] descriptorIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.METHOD_DESCRIPTOR_BYTES);
-            int descriptorIndex = Integer.valueOf(ByteUtils.bytesToHex(descriptorIndexBytes),
-                                                  DecompileConstants.HEX_RADIX);
+            int descriptorIndex = ByteUtils.bytesToInt(descriptorIndexBytes);
             String descriptorName = constantPoolContext.getUTF8tringByIndex(descriptorIndex);
             method.setDescriptorIndex(descriptorIndex);
             method.setDescriptorName(descriptorName);
 
             // 2.4 解析方法的附加属性数目
             byte[] attributeCountBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.METHOD_ATTRIBUTE_COUNT_BYTES);
-            int attributeCount = Integer.valueOf(ByteUtils.bytesToHex(attributeCountBytes),
-                                                 DecompileConstants.HEX_RADIX);
+            int attributeCount = ByteUtils.bytesToInt(attributeCountBytes);
             method.setAttributeCount(attributeCount);
 
             // 2.5 依次解析方法的每一个附加属性
             for (int j = 0; j < attributeCount; ++j) {
                 // 2.5.0 解析属性的名称
                 byte[] attributeNameIndexBytes = byteCodeContext.getSpecifiedByteCodeArray(DecompileConstants.ATTRIBUTE_NAME_INDEX_BYTES);
-                int attributeNameIndex = Integer.valueOf(ByteUtils.bytesToHex(attributeNameIndexBytes),
-                                                         DecompileConstants.HEX_RADIX);
+                int attributeNameIndex = ByteUtils.bytesToInt(attributeNameIndexBytes);
                 String attributeName = constantPoolContext.getUTF8tringByIndex(attributeNameIndex);
 
                 // 2.5.1 解析方法的累加属性
@@ -95,6 +95,14 @@ public class MethodsHandler extends DecompileHandler {
                 // 2.5.2 设置方的累加属性
                 method.addAttributeInfo(attributeInfo);
             }
+            
+            this.methodsContext.addMethod(method);
         }
+        
+        // 3.方法信息的输出
+        System.out.println(this.methodsContext.toString());
+        
+        // 4.调用下一个处理句柄
+        this.getNextHandler().parse(byteCodeContext, decompileFactory);
     }
 }

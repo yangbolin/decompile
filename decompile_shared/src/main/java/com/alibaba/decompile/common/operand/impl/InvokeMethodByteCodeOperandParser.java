@@ -8,10 +8,10 @@
 package com.alibaba.decompile.common.operand.impl;
 
 import com.alibaba.decompile.common.ByteCode;
-import com.alibaba.decompile.common.ByteUtils;
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.operand.ByteCodeOperandParser;
 import com.alibaba.decompile.common.operand.InvokeMethodByteCode;
+import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.constant.pool.impl.ConstantMethodInfo;
 import com.alibaba.decompile.context.ByteCodeContext;
 import com.alibaba.decompile.context.impl.ConstantPoolContext;
@@ -34,16 +34,13 @@ public class InvokeMethodByteCodeOperandParser implements ByteCodeOperandParser 
         
         // 1.解析方法在常量池中的索引所占的字节数组
         byte[] indexBytes = byteCodeContext.getSpecifiedByteCodeArray(byteCode.getOperandBytes());
-        int index = Integer.valueOf(ByteUtils.bytesToHex(indexBytes), DecompileConstants.HEX_RADIX);
+        int index = ByteUtils.bytesToInt(indexBytes);
         byteCode.setIndex(index);
         
         // 2.读取常量池中方法的描述符字符串
         ConstantPoolContext context = (ConstantPoolContext)decompileFactory.getDecompileContext(DecompileConstants.CONSTANT_POOL_CONTEXT);
         ConstantMethodInfo constantMethodInfo = (ConstantMethodInfo)context.getConstantInfoByIndex(index - 1);
         byteCode.setDescriptionString(constantMethodInfo.getStringDescription());
-        
-        // 3.设置当前字节码所占的字节总数
-        byteCode.setTotalBytes(DecompileConstants.BYTE_CODE_SYMBOL_CODE_BYTE + byteCode.getOperandBytes());
         
         return (ByteCode)byteCode;
     }

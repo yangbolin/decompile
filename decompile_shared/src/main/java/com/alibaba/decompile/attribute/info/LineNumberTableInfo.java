@@ -9,6 +9,7 @@ package com.alibaba.decompile.attribute.info;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <pre>
@@ -42,5 +43,16 @@ public class LineNumberTableInfo extends AttributeInfo {
     
     public void setPcNumberMap(Map<Integer, Integer> pcNumberMap) {
         this.pcNumberMap = pcNumberMap;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("LineNumber:\n");
+        Set<Integer> pcSet = this.pcNumberMap.keySet();
+        for (Integer pc : pcSet) {
+            sb.append(String.format("line:%d\t%d\n", this.pcNumberMap.get(pc), pc));
+        }
+        return sb.toString();
     }
 }

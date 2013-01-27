@@ -69,4 +69,11 @@ public class ExceptionsTable {
     public void setCatchTypeString(String catchTypeString) {
         this.catchTypeString = catchTypeString;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%d\t%d\t%d\t%s\n", this.startPC, this.endPC, this.handlerPC, this.catchTypeString));
+        return sb.toString();
+    }
 }
