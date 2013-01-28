@@ -131,7 +131,7 @@
                     <include>**/*</include>
                 </includes>
                 <excludes>
-                    <exclude>**/.svn/</exclude>
+                    <exclude>**/.git/</exclude>
                 </excludes>
             </testResource>
         </testResources>
