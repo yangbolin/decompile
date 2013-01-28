@@ -6,9 +6,11 @@ decompile
 This program is to simulate 'javap'
 
 1.You can use git to check out the code to your computer.
+
 	git git clone https://github.com/yangbolin/decompile.git
 
 2.You can use the following commands to compiling this project with eclipse.
+
 	mvn clean install
 	mvn eclipse:clean eclipse:eclipse
 	
