@@ -33,84 +33,15 @@
     <dependencyManagement>
 		<dependencies>
 			<dependency>
-				  <groupId>xml-apis</groupId>
-				  <artifactId>xml-apis</artifactId>
-				  <version>2.0.2</version>
+				<groupId>xml-apis</groupId>
+				<artifactId>xmlParserAPIs</artifactId>
+				<version>2.0.2</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
     <!-- Build Settings -->
     <build>            
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.3</version>
-                <inherited>true</inherited>
-                <configuration>
-                    <findbugsXmlOutput>true</findbugsXmlOutput>
-                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-                    <xmlOutput>true</xmlOutput>
-                </configuration>
-            </plugin>
-            <!-- Add source folders -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${build_helper_plugin_version}</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/main/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-test-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/test/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <testNGArtifactName>com.alibaba.external:test.testng.jdk15</testNGArtifactName>
-                    <argLine>-javaagent:"${settings.localRepository}/com/alibaba/external/test.jmockit/0.997/test.jmockit-0.997.jar"</argLine>
-                    <useSystemClassLoader>true</useSystemClassLoader>
-                    <suiteXmlFiles>
-                    </suiteXmlFiles>
-                </configuration>
-            </plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-				    <aggregate>true</aggregate>
-					<destDir>${project.basedir}/docs/sources</destDir>
-					<linkJavadoc>true</linkJavadoc>
-					<javadocDir>${project.basedir}/docs/javadoc</javadocDir>
-				</configuration>
-			</plugin>
-	    </plugins>
-    
         <sourceDirectory>src/main/java</sourceDirectory>  
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <resources>
@@ -120,7 +51,7 @@
                     <include>**/*</include>
                 </includes>
                 <excludes>
-                    <exclude>**/.svn/</exclude>
+                    <exclude>**/.git/</exclude>
                 </excludes>
             </resource>
         </resources>
