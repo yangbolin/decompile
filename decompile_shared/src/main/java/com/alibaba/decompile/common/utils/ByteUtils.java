@@ -23,12 +23,28 @@ public class ByteUtils {
      * @return
      */
     public static int bytesToInt(byte[] bytes) {
+        
+        boolean isNegative = false;
+        
+        // 姑且认为如果字节数组的以-1开始，则表示这个字节数组对应的整数为负数，目前只是做一个这样的推断
+        if (bytes[0] == -1) {
+            isNegative = true;
+            for (int j = 0; j < bytes.length; ++j) {
+                bytes[j] = Integer.valueOf(bytes[j] ^ 0xff).byteValue();
+            }
+        }
+        
         int s = 0;
         for (int i = 0; i < bytes.length; i++) {
             s <<= 8;
             s |= (bytes[i] & 0x000000ff);
         }
-
+        
+        if (isNegative == true) {
+            s += 1;
+            return 0 - s;
+        }
+        
         return s;
     }
 
@@ -92,15 +108,5 @@ public class ByteUtils {
         return ((((long) bytes[7] & 0xff) << 56) | (((long) bytes[6] & 0xff) << 48) | (((long) bytes[5] & 0xff) << 40)
                 | (((long) bytes[4] & 0xff) << 32) | (((long) bytes[3] & 0xff) << 24)
                 | (((long) bytes[2] & 0xff) << 16) | (((long) bytes[1] & 0xff) << 8) | (((long) bytes[0] & 0xff) << 0));
-    }
-
-    public static void main(String[] args) {
-        byte[] tempByte = { 00, 00, 01, 03 };
-        int s = 0;
-        for (int i = 0; i < tempByte.length; i++) {
-            s <<= 8;
-            s |= (tempByte[i] & 0x000000ff);
-        }
-        System.out.println(s);
     }
 }

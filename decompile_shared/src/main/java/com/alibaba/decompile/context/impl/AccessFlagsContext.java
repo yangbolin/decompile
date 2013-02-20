@@ -9,7 +9,6 @@ package com.alibaba.decompile.context.impl;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import com.alibaba.decompile.common.ClassAccessFlag;
 import com.alibaba.decompile.context.DecompileContext;
 
