@@ -26,7 +26,7 @@ public class ByteUtils {
         
         boolean isNegative = false;
         
-        // 姑且认为如果字节数组的以-1开始，则表示这个字节数组对应的整数为负数，目前只是做一个这样的推断
+        /*姑且认为如果字节数组的以-1开始，则表示这个字节数组对应的整数为负数，目前只是做一个这样的推断*/
         if (bytes[0] == -1) {
             isNegative = true;
             for (int j = 0; j < bytes.length; ++j) {
