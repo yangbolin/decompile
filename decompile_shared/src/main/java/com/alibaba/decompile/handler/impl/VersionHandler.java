@@ -45,6 +45,8 @@ public class VersionHandler extends DecompileHandler {
         System.out.println(String.format("The major version is %d and the minor version is %d", versionContext.getMajorVersion(), versionContext.getMinorVersion()));
         
         // 5.调用下一个处理的句柄
-        this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        if (this.getNextHandler() != null) {
+            this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        }
     }
 }

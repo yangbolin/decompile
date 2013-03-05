@@ -103,6 +103,8 @@ public class MethodsHandler extends DecompileHandler {
         System.out.println(this.methodsContext.toString());
         
         // 4.调用下一个处理句柄
-        this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        if (this.getNextHandler() != null) {
+            this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        }
     }
 }

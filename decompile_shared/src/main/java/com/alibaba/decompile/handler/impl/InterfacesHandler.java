@@ -8,7 +8,6 @@
 package com.alibaba.decompile.handler.impl;
 
 import java.util.List;
-
 import com.alibaba.decompile.common.DecompileConstants;
 import com.alibaba.decompile.common.utils.ByteUtils;
 import com.alibaba.decompile.context.ByteCodeContext;
@@ -72,6 +71,8 @@ public class InterfacesHandler extends DecompileHandler {
         }
         
         // 3.0 调用下一个处理句柄
-        this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        if (this.getNextHandler() != null) {
+            this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        }
     }
 }

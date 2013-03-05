@@ -62,7 +62,9 @@ public class FieldsHandler extends DecompileHandler {
         this.printAllField();
         
         // 5.调用下一个处理句柄
-        this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        if (this.getNextHandler() != null) {
+            this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        }
     }
     
     /**

@@ -46,8 +46,9 @@ public class MagicHandler extends DecompileHandler {
             System.out.println("The file MAGIC is: " + this.magicContext.getMagicNum());    // 把魔数打印出来 
             
             //调用下一个处理句柄
-            this.getNextHandler().parse(byteCodeContext, decompileFactory);
-            
+            if (this.getNextHandler() != null) {
+                this.getNextHandler().parse(byteCodeContext, decompileFactory);
+            } 
         } else {
             System.out.println("This file is not class byte file!");
         }

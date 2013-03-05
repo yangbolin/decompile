@@ -90,7 +90,9 @@ public class ConstantPoolHandler extends DecompileHandler {
             
             this.constantPoolContext.outPutConstantsPool();
             
-            this.getNextHandler().parse(byteCodeContext, decompileFactory);
+            if (this.getNextHandler() != null) {
+                this.getNextHandler().parse(byteCodeContext, decompileFactory);
+            }
         }
     }
 

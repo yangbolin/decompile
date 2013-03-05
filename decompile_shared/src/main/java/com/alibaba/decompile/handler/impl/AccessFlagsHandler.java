@@ -62,6 +62,8 @@ public class AccessFlagsHandler extends DecompileHandler {
         decompileFactory.addDecompileContext(DecompileConstants.ACCESS_FLAGS_CONTEXT, this.accessFlagsContext);
         
         // 3.调用下一个句柄来处理
-        this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        if (this.getNextHandler() != null) {
+            this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        }
     }
 }

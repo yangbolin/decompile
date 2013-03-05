@@ -9,7 +9,6 @@ package com.alibaba.decompile.attribute.info;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.alibaba.decompile.attribute.InnerClass;
 
 /**

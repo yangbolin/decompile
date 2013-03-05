@@ -1,12 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <!-- parent project -->
-    <parent>
-        <groupId>com.alibaba</groupId>
-        <artifactId>a2m.china</artifactId>
-        <version>2</version>
-    </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
     
     <!-- project info -->
     <groupId>com.alibaba.decompile.shared</groupId>
@@ -21,14 +15,7 @@
     </modules>
 
     <properties>
-        <!--maven properties-->
-        <maven.test.skip>false</maven.test.skip>
-        <!-- compiler settings properties -->
-        <java_source_version>1.6</java_source_version>
-        <java_target_version>1.6</java_target_version>
         <project.build.sourceEncoding>GBK</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>GBK</project.reporting.outputEncoding>
-		<maven_resources_version>2.3</maven_resources_version>
     </properties>
     <dependencyManagement>
 		<dependencies>
@@ -41,7 +28,19 @@
 	</dependencyManagement>
 
     <!-- Build Settings -->
-    <build>            
+    <build>
+		<plugins>  
+			<!--要是没有这个插件的话，maven就会出现编译错误，说不支持annotations-->
+			<plugin>  
+			  <groupId>org.apache.maven.plugins</groupId>  
+			  <artifactId>maven-compiler-plugin</artifactId>  
+			  <configuration>  
+				<source>5</source>  
+				<target>5</target>  
+				<encoding>UTF-8</encoding>  
+			  </configuration>  
+			</plugin>  
+		</plugins>      
         <sourceDirectory>src/main/java</sourceDirectory>  
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <resources>

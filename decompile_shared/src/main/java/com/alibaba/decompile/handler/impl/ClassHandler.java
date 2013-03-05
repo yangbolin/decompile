@@ -69,6 +69,8 @@ public class ClassHandler extends DecompileHandler {
                                          thisClassIndex, thisClassQualifiedName, superClassIndex, superClassQualifiedName));
         
         // 4.s调用下一个处理句柄
-        this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        if (this.getNextHandler() != null) {
+            this.getNextHandler().parse(byteCodeContext, decompileFactory);
+        }
     }
 }
